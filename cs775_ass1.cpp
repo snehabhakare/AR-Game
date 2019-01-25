@@ -99,7 +99,10 @@ void renderGL(void)
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(modelview_matrix));
   // Draw 
   // glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+  c.bind_pos();
   glDrawArrays(GL_LINE_LOOP, 0, c.num_vertices);
+  r.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r.num_vertices);
 
   // glColor3f(1,0,0);
   // DrawCircle(0,0,5,100);

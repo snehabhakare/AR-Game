@@ -1,42 +1,36 @@
 #include <cs775_ass1.hpp>
-//http://slabode.exofire.net/circle_draw.shtml
 extern GLuint vao,vbo,shaderProgram;
-class circle{
-	float cx,cy,r;
-	public:
+class rectangle{
+    float half_l,half_b;
+	float cx,cy;
+    public:
 	int num_vertices;
 	glm::vec4* v_positions;
 	glm::vec4* v_colors;
 	
-	circle(float cx_, float cy_, float r_, int num_vertices_) 
+	rectangle(float cx_, float cy_, float half_l_,float half_b_) 
 	{ 
 		cx=cx_;
 		cy=cy_;
-		r=r_;
-		num_vertices=num_vertices_;
+		half_l=half_l_;
+        half_b=half_b_;
+
+		num_vertices=4;
 		v_positions=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
 		v_colors=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
+        
+        v_positions[0]=glm::vec4(cx+half_l,cy+half_b,0,1);
+        v_positions[1]=glm::vec4(cx-half_l,cy+half_b,0,1);
+        v_positions[2]=glm::vec4(cx-half_l,cy-half_b,0,1);
+        v_positions[3]=glm::vec4(cx+half_l,cy-half_b,0,1);
+
+        v_colors[0]=glm::vec4(0.0,1.0,0,1);
+		v_colors[1]=glm::vec4(0.0,1.0,0,1);
+		v_colors[2]=glm::vec4(0.0,1.0,0,1);
+		v_colors[3]=glm::vec4(0.0,1.0,0,1);
 		
-		for(int ii = 0; ii < num_vertices; ii++) 
-		{ 
-			float theta = 2.0f * 3.1415926f * float(ii) / float(num_vertices);//get the current angle 
-
-			float x = r * cosf(theta);//calculate the x component 
-			float y = r * sinf(theta);//calculate the y component 
-
-			v_positions[ii]=glm::vec4(x+cx,y+cy,0,1);
-			v_colors[ii]=glm::vec4(1.0,0,0,1);
-			
-			// glVertex2f(x + cx, y + cy);//output vertex 
-
-		} 
+	 
 	}
-	void printvertices(){
-		for(int i=0;i<num_vertices;i++)
-			std::cout<<v_positions[i].x<<" "<<v_positions[i].y<<" "<<v_positions[i].z<<std::endl;
-
-	}
-
 	void bind_pos(){
 		glDeleteBuffers(1, &vbo);
 		glDeleteVertexArrays(1, &vao);
@@ -65,46 +59,25 @@ class circle{
 
 	}
 
-	void update_buffer(){	
-		free (v_colors);
-		free (v_positions);
-		v_positions=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		v_colors=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		
-		for(int ii = 0; ii < num_vertices; ii++) 
-		{ 
-			float theta = 2.0f * 3.1415926f * float(ii) / float(num_vertices);//get the current angle 
-
-			float x = r * cosf(theta);//calculate the x component 
-			float y = r * sinf(theta);//calculate the y component 
-
-			v_positions[ii]=glm::vec4(x+cx,y+cy,0,1);
-			v_colors[ii]=glm::vec4(1.0,0,0,1);
-			
-			// glVertex2f(x + cx, y + cy);//output vertex 
-
-		}	
-		bind_pos();
-	}
 	void inc_cx(){
 		cx+=0.1;
-		update_buffer();
+		
 	}
 	void dec_cx(){
 		cx-=0.1;
-		update_buffer();
+		
 	}
 	void inc_cy(){
 		cy+=0.1;
-		update_buffer();
+		
 	}
 	void dec_cy(){
 		cy-=0.1;
-		update_buffer();
+		
 	}
 
 
-	~circle(){
+	~rectangle(){
 
 		free (v_colors);
 		free (v_positions);

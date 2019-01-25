@@ -23,6 +23,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "circle.cpp"
+#include "rectangle.cpp"
 
 // Translation Parameters
 GLfloat xpos=0.0,ypos=0.0,zpos=0.0;
@@ -42,6 +43,7 @@ int r_comm=0;
 int u_comm=0;
 int d_comm=0;
 
+rectangle r(0,0,1.5,1);
 
 //-------------------------------------------------------------------------
 
