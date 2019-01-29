@@ -92,7 +92,7 @@ void renderGL(void)
   rotation_matrix = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1.0f,0.0f,0.0f));
   rotation_matrix = glm::rotate(rotation_matrix, yrot, glm::vec3(0.0f,1.0f,0.0f));
   rotation_matrix = glm::rotate(rotation_matrix, zrot, glm::vec3(0.0f,0.0f,1.0f));
-  ortho_matrix = glm::ortho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0);
+  ortho_matrix = glm::ortho(-20.0, 20.0, -20.0, 20.0, -20.0, 20.0);
 
   modelview_matrix = ortho_matrix * rotation_matrix;
 
@@ -175,6 +175,8 @@ int main(int argc, char** argv)
       // Render here
       renderGL();
 
+      world->Step(1.0/300.0,5,5);
+      c.update_buffer();
       // Swap front and back buffers
       glfwSwapBuffers(window);
       

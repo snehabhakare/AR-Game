@@ -22,9 +22,9 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <Box2D/Box2D.h>
 #include "circle.cpp"
 #include "rectangle.cpp"
-
 // Translation Parameters
 GLfloat xpos=0.0,ypos=0.0,zpos=0.0;
 // Rotation Parameters
@@ -37,14 +37,17 @@ bool solid=true;
 GLuint vbo, vao;
 GLuint shaderProgram;
 
-circle c(0,0,1,200);
 int l_comm=0;
 int r_comm=0;
 int u_comm=0;
 int d_comm=0;
 
-rectangle r(0,0,1.5,1);
+b2World* world=new b2World(b2Vec2(0.01,-0.05));
+circle c(0,0,0.5,200);
 
+rectangle r(0,-1.5,1,0.5);
+
+// world=; 
 //-------------------------------------------------------------------------
 
 #endif

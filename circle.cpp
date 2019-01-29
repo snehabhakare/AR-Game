@@ -1,8 +1,12 @@
 #include <cs775_ass1.hpp>
+// #include <Box2D/Box2D.h>
+
 //http://slabode.exofire.net/circle_draw.shtml
 extern GLuint vao,vbo,shaderProgram;
+extern b2World* world;
 class circle{
 	float cx,cy,r;
+	b2Body* body;
 	public:
 	int num_vertices;
 	glm::vec4* v_positions;
@@ -30,6 +34,21 @@ class circle{
 			// glVertex2f(x + cx, y + cy);//output vertex 
 
 		} 
+
+		b2BodyDef bodydef;
+		bodydef.position.Set(cx,cy);
+		bodydef.type=b2_dynamicBody;//change this TODO: 
+
+		body=world->CreateBody(&bodydef);
+
+		b2CircleShape shape;
+		shape.m_p.Set(cx,cy);
+		shape.m_radius=r;
+
+		b2FixtureDef fixturedef;
+		fixturedef.shape=&shape;
+		fixturedef.density=1.0;
+		body->CreateFixture(&fixturedef);
 	}
 	void printvertices(){
 		for(int i=0;i<num_vertices;i++)
@@ -66,24 +85,29 @@ class circle{
 	}
 
 	void update_buffer(){	
-		free (v_colors);
-		free (v_positions);
-		v_positions=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		v_colors=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		
+		// free (v_colors);
+		// free (v_positions);
+		// v_positions=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
+		// v_colors=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
+		b2Vec2 pos=body->GetPosition();
+		std::cout<<pos.x<<" "<<pos.y<<" : "<<cx<<" "<<cy<<std::endl;
+		if(pos.x==cx&&pos.y==cy)
+			return;
 		for(int ii = 0; ii < num_vertices; ii++) 
 		{ 
-			float theta = 2.0f * 3.1415926f * float(ii) / float(num_vertices);//get the current angle 
+			// float theta = 2.0f * 3.1415926f * float(ii) / float(num_vertices);//get the current angle 
 
-			float x = r * cosf(theta);//calculate the x component 
-			float y = r * sinf(theta);//calculate the y component 
+			// float x = r * cosf(theta);//calculate the x component 
+			// float y = r * sinf(theta);//calculate the y component 
 
-			v_positions[ii]=glm::vec4(x+cx,y+cy,0,1);
-			v_colors[ii]=glm::vec4(1.0,0,0,1);
+			v_positions[ii]=v_positions[ii]+glm::vec4(pos.x-cx,pos.y-cy,0,0);
+			// v_colors[ii]=glm::vec4(1.0,0,0,1);
 			
 			// glVertex2f(x + cx, y + cy);//output vertex 
 
 		}	
+		cx=pos.x;
+		cy=pos.y;
 		bind_pos();
 	}
 	void inc_cx(){

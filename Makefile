@@ -1,7 +1,7 @@
-CC=g++
+CC=g++ 
 
-OPENGLLIB= -lGL
-GLEWLIB= -lGLEW
+OPENGLLIB= -lGL -std=gnu++0x
+GLEWLIB= -lGLEW -lBox2D
 GLFWLIB = -lglfw
 LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB)
 LDFLAGS=-L/usr/local/lib 
