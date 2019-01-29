@@ -42,10 +42,19 @@ int r_comm=0;
 int u_comm=0;
 int d_comm=0;
 
-b2World* world=new b2World(b2Vec2(0.01,-0.05));
+b2World* world=new b2World(b2Vec2(0.05,-0.05));
 circle c(0,0,0.5,200);
 
-rectangle r(0,-1.5,1,0.5);
+// rectangle r(0,-1.5,1,0.5);
+rectangle r1(0,15,15,0.1);
+rectangle r2(-15,0,0.1,15);
+rectangle r3(0,-15,15,0.1);
+rectangle r4(15,0,0.1,15);
+rectangle r5(-10,-5,0.1,10);
+rectangle r6(-5,5,0.1,10);
+rectangle r7(0,-5,0.1,10);
+rectangle r8(5,5,0.1,10);
+rectangle r9(10,-5,0.1,10);
 
 // world=; 
 //-------------------------------------------------------------------------

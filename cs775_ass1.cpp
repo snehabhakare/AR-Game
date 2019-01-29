@@ -101,8 +101,27 @@ void renderGL(void)
   // glDrawArrays(GL_TRIANGLES, 0, num_vertices);
   c.bind_pos();
   glDrawArrays(GL_LINE_LOOP, 0, c.num_vertices);
-  r.bind_pos();
-  glDrawArrays(GL_LINE_LOOP, 0, r.num_vertices);
+  // r.bind_pos();
+  // glDrawArrays(GL_LINE_LOOP, 0, r.num_vertices);
+  r1.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r1.num_vertices);
+  r2.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r2.num_vertices);
+  r3.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r3.num_vertices);
+  r4.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r4.num_vertices);
+  r5.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r5.num_vertices);
+  r6.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r6.num_vertices);
+  r7.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r7.num_vertices);
+  r8.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r8.num_vertices);
+  r9.bind_pos();
+  glDrawArrays(GL_LINE_LOOP, 0, r9.num_vertices);
+
 
   // glColor3f(1,0,0);
   // DrawCircle(0,0,5,100);
