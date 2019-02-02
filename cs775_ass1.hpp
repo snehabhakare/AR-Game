@@ -26,37 +26,27 @@
 #include "circle.cpp"
 #include "rectangle.cpp"
 // Translation Parameters
-GLfloat xpos=0.0,ypos=0.0,zpos=0.0;
+GLfloat xpos=0.0,ypos=0.0,zpos=5.0;
 // Rotation Parameters
 GLfloat xrot=0.0,yrot=0.0,zrot=0.0;
 
 //Running variable to toggle culling on/off
-bool enable_culling=true;
+bool enable_culling = true;
 //Running variable to toggle wireframe/solid modelling
-bool solid=true;
+bool solid = true;
 GLuint vbo, vao;
 GLuint shaderProgram;
 
-int l_comm=0;
-int r_comm=0;
-int u_comm=0;
-int d_comm=0;
+int l_comm = 0;
+int r_comm = 0;
+int u_comm = 0;
+int d_comm = 0;
 
-b2World* world=new b2World(b2Vec2(0.05,-0.05));
-circle c(0,0,0.5,200);
+b2World* world = new b2World(b2Vec2(0,-10));
+circle c(2.5,7.5,0.5,200);
+rectangle* r;
+std::vector<rectangle*> maze;
 
-// rectangle r(0,-1.5,1,0.5);
-rectangle r1(0,15,15,0.1);
-rectangle r2(-15,0,0.1,15);
-rectangle r3(0,-15,15,0.1);
-rectangle r4(15,0,0.1,15);
-rectangle r5(-10,-5,0.1,10);
-rectangle r6(-5,5,0.1,10);
-rectangle r7(0,-5,0.1,10);
-rectangle r8(5,5,0.1,10);
-rectangle r9(10,-5,0.1,10);
-
-// world=; 
 //-------------------------------------------------------------------------
 
 #endif

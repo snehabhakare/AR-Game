@@ -1,9 +1,9 @@
 #include <cs775_ass1.hpp>
-// #include <Box2D/Box2D.h>
 
 //http://slabode.exofire.net/circle_draw.shtml
 extern GLuint vao,vbo,shaderProgram;
 extern b2World* world;
+
 class circle{
 	float cx,cy,r;
 	b2Body* body;
@@ -14,12 +14,12 @@ class circle{
 	
 	circle(float cx_, float cy_, float r_, int num_vertices_) 
 	{ 
-		cx=cx_;
-		cy=cy_;
-		r=r_;
-		num_vertices=num_vertices_;
-		v_positions=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		v_colors=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
+		cx = cx_;
+		cy = cy_;
+		r = r_;
+		num_vertices = num_vertices_;
+		v_positions = (glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
+		v_colors = (glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
 		
 		for(int ii = 0; ii < num_vertices; ii++) 
 		{ 
@@ -30,29 +30,26 @@ class circle{
 
 			v_positions[ii]=glm::vec4(x+cx,y+cy,0,1);
 			v_colors[ii]=glm::vec4(1.0,0,0,1);
-			
-			// glVertex2f(x + cx, y + cy);//output vertex 
-
 		} 
 
 		b2BodyDef bodydef;
-		bodydef.position.Set(cx,cy);
-		bodydef.type=b2_dynamicBody;//change this TODO: 
+		bodydef.position = b2Vec2(cx,cy);
+		bodydef.type = b2_dynamicBody;//change this TODO: 
 
-		body=world->CreateBody(&bodydef);
+		body = world->CreateBody(&bodydef);
 
 		b2CircleShape shape;
-		shape.m_p.Set(cx,cy);
-		shape.m_radius=r;
+		shape.m_p = b2Vec2(0,0);
+		shape.m_radius = r;
 
 		b2FixtureDef fixturedef;
-		fixturedef.shape=&shape;
-		fixturedef.density=1.0;
+		fixturedef.shape = &shape;
+		fixturedef.density = 1.0;
 		body->CreateFixture(&fixturedef);
 	}
 	void printvertices(){
 		for(int i=0;i<num_vertices;i++)
-			std::cout<<v_positions[i].x<<" "<<v_positions[i].y<<" "<<v_positions[i].z<<std::endl;
+			std::cout << v_positions[i].x << " " << v_positions[i].y << " " << v_positions[i].z <<std::endl;
 
 	}
 
@@ -85,56 +82,46 @@ class circle{
 	}
 
 	void update_buffer(){	
-		// free (v_colors);
-		// free (v_positions);
-		// v_positions=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		// v_colors=(glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		b2Vec2 pos=body->GetPosition();
-		std::cout<<pos.x<<" "<<pos.y<<" : "<<cx<<" "<<cy<<std::endl;
-		if(pos.x==cx&&pos.y==cy)
+		b2Vec2 pos = body->GetPosition();
+		// b2Vec2 gravity = world->GetGravity();
+		// std::cout<<pos.x<<" "<<pos.y<<" : "<<gravity.x<<" "<<gravity.y<<std::endl;
+		if(pos.x == cx && pos.y == cy)
 			return;
 		for(int ii = 0; ii < num_vertices; ii++) 
-		{ 
-			// float theta = 2.0f * 3.1415926f * float(ii) / float(num_vertices);//get the current angle 
-
-			// float x = r * cosf(theta);//calculate the x component 
-			// float y = r * sinf(theta);//calculate the y component 
-
-			v_positions[ii]=v_positions[ii]+glm::vec4(pos.x-cx,pos.y-cy,0,0);
-			// v_colors[ii]=glm::vec4(1.0,0,0,1);
-			
-			// glVertex2f(x + cx, y + cy);//output vertex 
-
+		{
+			v_positions[ii] += glm::vec4(pos.x-cx,pos.y-cy,0,0);
 		}	
-		cx=pos.x;
-		cy=pos.y;
+		cx = pos.x;
+		cy = pos.y;
 		bind_pos();
 	}
 	void inc_cx(){
-		cx+=0.1;
+		b2Vec2 gravity = world->GetGravity();
+		gravity.x += 1;
+		world->SetGravity(gravity);
 		update_buffer();
 	}
 	void dec_cx(){
-		cx-=0.1;
+		b2Vec2 gravity = world->GetGravity();
+		gravity.x -= 1;
+		world->SetGravity(gravity);
 		update_buffer();
 	}
 	void inc_cy(){
-		cy+=0.1;
+		b2Vec2 gravity = world->GetGravity();
+		gravity.y += 1;
+		world->SetGravity(gravity);
 		update_buffer();
 	}
 	void dec_cy(){
-		cy-=0.1;
+		b2Vec2 gravity = world->GetGravity();
+		gravity.y -= 1;
+		world->SetGravity(gravity);
 		update_buffer();
 	}
 
-
 	~circle(){
-
 		free (v_colors);
 		free (v_positions);
 	}
-
-
 };
-
-

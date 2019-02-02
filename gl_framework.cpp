@@ -1,6 +1,6 @@
 #include "gl_framework.hpp"
 extern GLfloat xrot,yrot,zrot;
-// extern circle c(0,0,1,200);
+
 extern int l_comm,r_comm,u_comm,d_comm;
 namespace csX75
 {
