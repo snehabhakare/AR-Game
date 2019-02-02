@@ -1,83 +1,105 @@
-#include <cs775_ass1.hpp>
-
-extern GLuint vao,vbo,shaderProgram;
+#pragma once
+#include "cs775_assigment1.hpp"
+extern const float height_of_each_elem;
 extern b2World* world;
+extern float W;
+static void
+mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type)
+{
+  static GLfloat n[6][3] =
+  {
+    {-1.0, 0.0, 0.0},
+    {0.0, 1.0, 0.0},
+    {1.0, 0.0, 0.0},
+    {0.0, -1.0, 0.0},
+    {0.0, 0.0, 1.0},
+    {0.0, 0.0, -1.0}
+  };
+  static GLint faces[6][4] =
+  {
+    {0, 1, 2, 3},
+    {3, 2, 6, 7},
+    {7, 6, 5, 4},
+    {4, 5, 1, 0},
+    {5, 6, 2, 1},
+    {7, 4, 0, 3}
+  };
+  GLfloat v[8][3];
+  GLint i;
 
+  v[0][0] = v[1][0] = v[2][0] = v[3][0] = -size1 / 2;
+  v[4][0] = v[5][0] = v[6][0] = v[7][0] = size1 / 2;
+  v[0][1] = v[1][1] = v[4][1] = v[5][1] = -size2 / 2;
+  v[2][1] = v[3][1] = v[6][1] = v[7][1] = size2 / 2;
+  v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size3 / 2;
+  v[1][2] = v[2][2] = v[5][2] = v[6][2] = size3 / 2;
+
+  for (i = 5; i >= 0; i--) {
+    glBegin(type);
+    glNormal3fv(&n[i][0]);
+    glColor3f(1.0f,0.0f,0.0f);
+    glVertex3fv(&v[faces[i][0]][0]);
+    glColor3f(1.0f,0.0f,0.0f);
+    glVertex3fv(&v[faces[i][1]][0]);
+    glColor3f(1.0f,0.0f,0.0f);
+    glVertex3fv(&v[faces[i][2]][0]);
+    glColor3f(1.0f,0.0f,0.0f);
+    glVertex3fv(&v[faces[i][3]][0]);
+    glEnd();
+  }
+}
+
+void
+myglutSolidCuboid(GLdouble size1,GLdouble size2,GLdouble size3)
+{
+  mydrawBox(size1,size2,size3 ,GL_QUADS);
+}
 class rectangle{
     float half_l,half_b;
-	float cx,cy;
-	b2Body* body;
+    float cx,cy;
+    bool go_to_box2d;
+    float z_translate;
+    b2Body* body;
+    
     public:
-	int num_vertices;
-	glm::vec4* v_positions;
-	glm::vec4* v_colors;
-	
-	rectangle(float cx_, float cy_, float half_l_,float half_b_) 
-	{ 
-		cx = cx_;
+
+    rectangle(float half_l_,float half_b_,float cx_,float cy_,bool go_to_box2d_=true,float z_translate_=1.5*height_of_each_elem){
+        cx = cx_;
 		cy = cy_;
 		half_l = half_l_;
         half_b = half_b_;
+        z_translate=z_translate_;
+        go_to_box2d = go_to_box2d_;
 
-		num_vertices = 4;
-		v_positions = (glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-		v_colors = (glm::vec4*) malloc (num_vertices*sizeof(glm::vec4));
-        
-        v_positions[0] = glm::vec4(cx+half_l,cy+half_b,0,1);
-        v_positions[1] = glm::vec4(cx-half_l,cy+half_b,0,1);
-        v_positions[2] = glm::vec4(cx-half_l,cy-half_b,0,1);
-        v_positions[3] = glm::vec4(cx+half_l,cy-half_b,0,1);
-
-        v_colors[0] = glm::vec4(0.0,1.0,0,1);
-		v_colors[1] = glm::vec4(0.0,1.0,0,1);
-		v_colors[2] = glm::vec4(0.0,1.0,0,1);
-		v_colors[3] = glm::vec4(0.0,1.0,0,1);
-		
-		b2BodyDef bodydef;
+        b2BodyDef bodydef;
 		bodydef.position = b2Vec2(cx,cy);
 		bodydef.type = b2_staticBody;//change this TODO: 
 
 		body = world->CreateBody(&bodydef);
 
 		b2PolygonShape shape;
-		shape.SetAsBox(half_l,half_b);
+		shape.SetAsBox(half_l/2,half_b/2);
 
 		b2FixtureDef fixturedef;
 		fixturedef.shape = &shape;
 		fixturedef.density = 1.0;
 		body->CreateFixture(&fixturedef);
-	}
-	void bind_pos(){
-		glDeleteBuffers(1, &vbo);
-		glDeleteVertexArrays(1, &vao);
+	
+    }
 
-		glGenVertexArrays (1, &vao);
-		//Set it as the current array to be used by binding it
-		glBindVertexArray (vao);
 
-		//Ask GL for a Vertex Buffer Object (vbo)
-		glGenBuffers (1, &vbo);
-		//Set it as the current buffer to be used by binding it
-		glBindBuffer (GL_ARRAY_BUFFER, vbo);
-		//Copy the points into the current buffer
-		glBufferData (GL_ARRAY_BUFFER, (sizeof (v_positions) + sizeof(v_colors))*num_vertices*2, NULL, GL_STATIC_DRAW);
-		glBufferSubData( GL_ARRAY_BUFFER, 0, 2*sizeof(v_positions)*num_vertices, v_positions );
-		glBufferSubData( GL_ARRAY_BUFFER, 2*sizeof(v_positions)*num_vertices, 2*sizeof(v_colors)*num_vertices, v_colors );
-		GLuint vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
-		glEnableVertexAttribArray( vPosition );
-		glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-		
-		GLuint vColor = glGetAttribLocation( shaderProgram, "vColor" ); 
-		glEnableVertexAttribArray( vColor );
-		glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(2*sizeof(v_positions)*num_vertices) );
+    void draw(){
+        if(!go_to_box2d){
+          glColor3f(1.0f,0.0f,0.0f);
+        }
+        glTranslatef(cx,cy,z_translate);
+        myglutSolidCuboid(half_l+W,half_b+W,height_of_each_elem);
+        glTranslatef(-cx,-cy,-z_translate);
+        
+    }
 
-		// uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
+    ~rectangle(){
 
-	}
-
-	~rectangle(){
-
-		free (v_colors);
-		free (v_positions);
-	}
+    }
 };
+
