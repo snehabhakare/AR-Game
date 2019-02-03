@@ -140,7 +140,7 @@ static void mainLoop(void)
     markerInfo =  arGetMarker( arHandle ); 
     k = -1;
     for( j = 0; j < markerNum; j++ ) {
-        ARLOG("ID=%d, CF = %f\n", markerInfo[j].id, markerInfo[j].cf);
+        // ARLOG("ID=%d, CF = %f\n", markerInfo[j].id, markerInfo[j].cf);
         if( patt_id == markerInfo[j].id ) {
             if( k == -1 ) {
                 if (markerInfo[j].cf >= 0.7) k = j;
@@ -307,7 +307,7 @@ static void draw( ARdouble trans[3][4] )
     printf("x angle is %f\n",A[1]*180/M_PI);
     printf("z angle is %f\n",A[2]*180/M_PI);
     float g_x=A[2]*180/M_PI;
-    world->SetGravity(b2Vec2(gravity_constant*(g_x-90),gravity_constant*A[0]*180/M_PI));
+    world->SetGravity(b2Vec2(-gravity_constant*(g_x-90),gravity_constant*A[0]*180/M_PI));
     printf("gravity is (%f,%f)\n",world->GetGravity().x,world->GetGravity().y);
     printf("Pos is (%f,%f)\n",ball.body->GetPosition().x,ball.body->GetPosition().x);
 
@@ -339,7 +339,7 @@ static void draw( ARdouble trans[3][4] )
     glColor3f(1.0f, 0.0f, 0.0f);
 
     ball.draw();
-    world->Step(1.0,5,5);
+    world->Step(frame_rate,5,5);
     ball.update();
 
     // r.draw();

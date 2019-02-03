@@ -99,6 +99,7 @@ static void   mainLoop(void);
 static void   draw( ARdouble trans[3][4] );
 
 float gravity_constant=0.5;
+float frame_rate=1/10.0;
 b2World* world=new b2World(b2Vec2(5,5));
 
 
