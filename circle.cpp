@@ -1,8 +1,10 @@
 #pragma once
 #include "cs775_assigment1.hpp"
+
 extern const float height_of_each_elem;
 extern b2World* world;
 extern float coeff_of_rest;
+
 class circle{
     float r;
     float cx,cy;
@@ -34,28 +36,25 @@ class circle{
         fixturedef.restitution=coeff_of_rest;
 
 		body->CreateFixture(&fixturedef);
-	
     }
-
 
     void draw(){
         glTranslatef(cx,cy,r+height_of_each_elem);
         glutSolidSphere(r,slice,stack);
         glTranslatef(-cx,-cy,-(r+height_of_each_elem));
-        
     }
+
     void update(){
         b2Vec2 pos= body->GetPosition();
         cx=pos.x;
         cy=pos.y;
-
     }
+
     void display(){
         printf("%f,%f\n",cx,cy);
-
     }
-    ~circle(){
 
+    ~circle(){
     }
 };
 

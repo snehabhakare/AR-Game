@@ -1,23 +1,28 @@
 #include "cs775_assigment1.hpp"
+
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
     init(argc, argv);
-
     argSetDispFunc( mainLoop, 1 );
 	argSetKeyFunc( keyFunc );
 	count = 0;
     fps[0] = '\0';
 	arUtilTimerReset();
+    begin = clock();
     argMainLoop();
 	return (0);
 }
+
 static void keyFunc( unsigned char key, int x, int y )
 {
     int   value;
 
     switch (key) {
 		case 0x1b:
+            end = clock();
+            elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+            printf("Time elapsed: %f\n", elapsed_secs);
 			cleanup();
 			exit(0);
 			break;
@@ -303,13 +308,13 @@ static void draw( ARdouble trans[3][4] )
     argConvGlpara(trans, gl_para);
     float A[3];
     get_angles(gl_para,A);
-    printf("y angle is %f\n",A[0]*180/M_PI);
-    printf("x angle is %f\n",A[1]*180/M_PI);
-    printf("z angle is %f\n",A[2]*180/M_PI);
+    // printf("y angle is %f\n",A[0]*180/M_PI);
+    // printf("x angle is %f\n",A[1]*180/M_PI);
+    // printf("z angle is %f\n",A[2]*180/M_PI);
     float g_x=A[2]*180/M_PI;
     world->SetGravity(b2Vec2(-gravity_constant*(g_x-90),gravity_constant*A[0]*180/M_PI));
-    printf("gravity is (%f,%f)\n",world->GetGravity().x,world->GetGravity().y);
-    printf("Pos is (%f,%f)\n",ball.body->GetPosition().x,ball.body->GetPosition().x);
+    // printf("gravity is (%f,%f)\n",world->GetGravity().x,world->GetGravity().y);
+    // printf("Pos is (%f,%f)\n",ball.body->GetPosition().x,ball.body->GetPosition().x);
 
     glMatrixMode(GL_MODELVIEW);
 #ifdef ARDOUBLE_IS_FLOAT

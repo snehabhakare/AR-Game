@@ -1,18 +1,19 @@
 #pragma once
 #include "cs775_assigment1.hpp"
+
 extern float B,L,W;
 extern std::vector<rectangle*> maze_list;
+
 void maze(){
     rectangle* r;
-    //base
-    
-    r=new rectangle(L,B,0,0,false,0.5*height_of_each_elem);
-    maze_list.push_back(r);
-    
-
-    //vertical
     int Bs=B/8;
     int Ls=L/10;
+
+    //base    
+    r=new rectangle(L,B,0,0,false,0.5*height_of_each_elem);
+    maze_list.push_back(r);
+
+    //vertical
     //1
     r=new rectangle(W,8*Bs,-5*Ls,0);
     maze_list.push_back(r);
@@ -76,8 +77,8 @@ void maze(){
     //21
     r=new rectangle(W,8*Bs,5*Ls,0);
     maze_list.push_back(r);
+    
     //horizontal
-
     //1
     r=new rectangle(10*Ls,W,0,4*Bs);
     maze_list.push_back(r);
