@@ -53,7 +53,7 @@ float frame_rate=1/10.0;
 float coeff_of_rest=0.5f;
 b2World* world=new b2World(b2Vec2(0,0));
 
-const float height_of_each_elem=10;
+const float height_of_each_elem=3;
 float B=80,L=100,W=1;
 b2Vec2 init_pos(1.5*L/10,-1.5*B/8);
 // b2Vec2 x_range(4*L/10,5*L/10);
@@ -72,3 +72,5 @@ bool reached=true;
 int big_score=INT_MAX;
 int num_of_players=1;
 int curr_player=0;
+
+int level=0;

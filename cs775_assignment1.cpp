@@ -219,7 +219,6 @@ static void   init(int argc, char *argv[])
     AR_PIXEL_FORMAT pixFormat;
     ARUint32        id0, id1;
     int             i;
-    maze();
     if( argc == 1 ) vconf[0] = '\0';
     else {
         strcpy( vconf, argv[1] );
@@ -229,8 +228,23 @@ static void   init(int argc, char *argv[])
     
     printf("Please Enter the Number of Players: ");
     std::cin>>num_of_players;
+
     for (int i=0;i<num_of_players;i++)
         scores.push_back(big_score);
+    printf("PLEASE ENTER YOUR LEVEL (0(beginner)-1(advanced)):  ");
+    std::cin>>level;
+    if(level!=0&& level !=1){
+        printf("PLEASE ENTER VALID ENTRY \n ");
+        printf("Setting default for now\n");
+    }
+    if(level==1){
+        printf("Setting Advanced\n");
+    
+        x_range=b2Vec2(4*L/10,5*L/10);
+        y_range=b2Vec2(0,B/8);
+    }
+    maze();
+
     /* open the video path */
 
 	// ARLOGi("Using video configuration '%s'.\n", vconf);
