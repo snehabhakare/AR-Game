@@ -89,9 +89,6 @@ static void keyFunc( unsigned char key, int x, int y )
             reached=false;
             curr_player++;
             break;
-        case 's':
-            ball.body->SetTransform(init_pos,ball.body->GetAngle());
-            break;
 		default:
 			break;
 	}
@@ -232,6 +229,8 @@ static void   init(int argc, char *argv[])
     
     printf("Please Enter the Number of Players: ");
     std::cin>>num_of_players;
+    for (int i=0;i<num_of_players;i++)
+        scores.push_back(big_score);
     /* open the video path */
 
 	// ARLOGi("Using video configuration '%s'.\n", vconf);
@@ -400,7 +399,7 @@ static void draw( ARdouble trans[3][4] )
                 elapsed_secs=double(end-begin)/CLOCKS_PER_SEC;
                 printf("Time Taken by Player %d = %f\n",curr_player,elapsed_secs);
                 reached=true;
-                scores.push_back(elapsed_secs);
+                scores[curr_player-1]=elapsed_secs;
                 if(curr_player==num_of_players){
                     printf("Game Ends ...........!!!!!!!!!\n");
                     int min_index=1;
@@ -419,9 +418,6 @@ static void draw( ARdouble trans[3][4] )
         }
     }
 
-    // r.draw();
-    // glTranslatef( 0.0f, 0.0f, 40.0f );
-    // glutSolidCube(80.0);
 #else
     glTranslatef( 0.0f, 0.0f, 20.0f );
     glRotatef(90.0f, 1.0f, 0.0f, 0.0f);

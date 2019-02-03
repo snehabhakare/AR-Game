@@ -64,12 +64,11 @@ b2Vec2 y_range(0,B/8);
 circle ball(3,init_pos.x,init_pos.y);
 std::vector<rectangle*> maze_list;
 
-int players;
 double elapsed_secs = 0;
 clock_t begin, end;
 std::vector<double> scores;
-
 bool reached=true;
 
+int big_score=INT_MAX;
 int num_of_players=1;
 int curr_player=0;

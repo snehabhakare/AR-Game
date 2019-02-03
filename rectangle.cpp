@@ -140,9 +140,6 @@ static void mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type,int
     }
     else{
         glPushMatrix(); // Save world coordinate system.
-        // glRotatef(gDrawRotateAngle, 0.0f, 0.0f, 1.0f); // Rotate about z axis.
-        // glScalef(fSize, fSize, fSize);
-        // glTranslatef(0.0f, 0.0f, 0.5f); // Place base of cube on marker surface.
         glDisable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_BLEND);
