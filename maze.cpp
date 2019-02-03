@@ -9,10 +9,18 @@ void maze(){
     int Bs=B/8;
     int Ls=L/10;
 
-    //base    
-    r=new rectangle(L,B,0,0,false,0.5*height_of_each_elem);
+    // base    
+    r=new rectangle(L,B,0,0,1,0.5*height_of_each_elem);
     maze_list.push_back(r);
 
+    //start
+    r=new rectangle(Ls,Bs,1.5*Ls,-1.5*Bs,3,0.6*height_of_each_elem);
+    maze_list.push_back(r);
+    
+    //end
+    r=new rectangle(Ls,Bs,4.5*Ls,0.5*Bs,2,0.6*height_of_each_elem);
+    maze_list.push_back(r);
+    
     //vertical
     //1
     r=new rectangle(W,8*Bs,-5*Ls,0);

@@ -27,7 +27,7 @@ class circle{
 
 		b2CircleShape shape;
 		shape.m_p = b2Vec2(0,0);
-		shape.m_radius = r;
+		shape.m_radius = r+0.2;
 
 		b2FixtureDef fixturedef;
 		fixturedef.shape = &shape;

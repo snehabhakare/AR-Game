@@ -32,7 +32,7 @@ static void keyFunc( unsigned char key, int x, int y )
         	value -= 5;
         	if( value < 0 ) value = 0;
         	arSetLabelingThresh( arHandle, value );
-        	ARLOG("thresh = %d\n", value);
+        	// ARLOG("thresh = %d\n", value);
         	break;
 		case '2':
 		case '+':
@@ -40,7 +40,7 @@ static void keyFunc( unsigned char key, int x, int y )
        		value += 5;
         	if( value > 255 ) value = 255;
         	arSetLabelingThresh( arHandle, value );
-        	ARLOG("thresh = %d\n", value);
+        	// ARLOG("thresh = %d\n", value);
         	break;
 		case 'd':
 		case 'D':
@@ -83,6 +83,15 @@ static void keyFunc( unsigned char key, int x, int y )
 			ARLOG("\nAdditionally, the ARVideo library supplied the following help text:\n");
 			arVideoDispOption();
 			break;
+        case 'r':
+            begin=clock();
+            ball.body->SetTransform(init_pos,ball.body->GetAngle());
+            reached=false;
+            curr_player++;
+            break;
+        case 's':
+            ball.body->SetTransform(init_pos,ball.body->GetAngle());
+            break;
 		default:
 			break;
 	}
@@ -107,7 +116,7 @@ static void mainLoop(void)
     }
 
     argDrawMode2D(vp);
-    arGetDebugMode( arHandle, &debugMode );
+    // arGetDebugMode( arHandle, &debugMode );
     if( debugMode == 0 ) {
         argDrawImage( dataPtr );
     }
@@ -128,13 +137,27 @@ static void mainLoop(void)
     }
 
     if( count % 60 == 0 ) {
-        sprintf(fps, "%f[fps]", 60.0/arUtilTimer());
+        // sprintf(fps, "%f[fps]", 60.0/arUtilTimer());
         arUtilTimerReset();
     }
     count++;
     // glColor3f(0.0f, 1.0f, 0.0f);
     argDrawStringsByIdealPos(fps, 10, ysize-30);
-
+    char* p;
+    if(!reached){
+        const char* x=std::to_string(double(clock()-begin)/CLOCKS_PER_SEC).c_str();
+        int l=0;
+        for(int l=0;x[l]!='\0';l++);
+        p=(char*)malloc(l*sizeof(char));
+        int m=0;
+        for(;x[m]!='\0';m++)
+        {
+            p[m]=x[m];
+        }
+        p[m]='\0';
+    }
+    argDrawStringsByIdealPos(p, 10, ysize-60);
+    
     markerNum = arGetMarkerNum( arHandle );
     if( markerNum == 0 ) {
         argSwapBuffers();
@@ -164,10 +187,24 @@ static void mainLoop(void)
     else {
         err = arGetTransMatSquare(ar3DHandle, &(markerInfo[k]), patt_width, patt_trans);
     }
-    sprintf(errValue, "err = %f", err);
+    // sprintf(errValue, "err = %f", err);
     // glColor3f(0.0f, 1.0f, 0.0f);
+    
     argDrawStringsByIdealPos(fps, 10, ysize-30);
-    argDrawStringsByIdealPos(errValue, 10, ysize-60);
+    // char* p;
+    if(!reached){
+        const char* x=std::to_string(double(clock()-begin)/CLOCKS_PER_SEC).c_str();
+        int l=0;
+        for(int l=0;x[l]!='\0';l++);
+        p=(char*)malloc(l*sizeof(char));
+        int m=0;
+        for(;x[m]!='\0';m++)
+        {
+            p[m]=x[m];
+        }
+        p[m]='\0';
+    }
+    argDrawStringsByIdealPos(p, 10, ysize-60);
     //ARLOG("err = %f\n", err);
 
     contF2 = 1;
@@ -192,27 +229,31 @@ static void   init(int argc, char *argv[])
         for( i = 2; i < argc; i++ ) {strcat(vconf, " "); strcat(vconf,argv[i]);}
     }
 
+    
+    printf("Please Enter the Number of Players: ");
+    std::cin>>num_of_players;
     /* open the video path */
-	ARLOGi("Using video configuration '%s'.\n", vconf);
+
+	// ARLOGi("Using video configuration '%s'.\n", vconf);
     if( arVideoOpen( vconf ) < 0 ) exit(0);
     if( arVideoGetSize(&xsize, &ysize) < 0 ) exit(0);
-    ARLOGi("Image size (x,y) = (%d,%d)\n", xsize, ysize);
+    // ARLOGi("Image size (x,y) = (%d,%d)\n", xsize, ysize);
     if( (pixFormat=arVideoGetPixelFormat()) < 0 ) exit(0);
     if( arVideoGetId( &id0, &id1 ) == 0 ) {
-        ARLOGi("Camera ID = (%08x, %08x)\n", id1, id0);
-        sprintf(vconf, VPARA_NAME, id1, id0);
+        // ARLOGi("Camera ID = (%08x, %08x)\n", id1, id0);
+        // sprintf(vconf, VPARA_NAME, id1, id0);
         if( arVideoLoadParam(vconf) < 0 ) {
-            ARLOGe("No camera setting data!!\n");
+            // ARLOGe("No camera setting data!!\n");
         }
     }
 
     /* set the initial camera parameters */
     if( arParamLoad(CPARA_NAME, 1, &cparam) < 0 ) {
-        ARLOGe("Camera parameter load error !!\n");
+        // ARLOGe("Camera parameter load error !!\n");
         exit(0);
     }
     arParamChangeSize( &cparam, xsize, ysize, &cparam );
-    ARLOG("*** Camera Parameter ***\n");
+    // ARLOG("*** Camera Parameter ***\n");
     arParamDisp( &cparam );
     if ((gCparamLT = arParamLTCreate(&cparam, AR_PARAM_LT_DEFAULT_OFFSET)) == NULL) {
         ARLOGe("Error: arParamLTCreate.\n");
@@ -267,6 +308,10 @@ static void   init(int argc, char *argv[])
         ARLOGe("video capture start error !!\n");
         exit(0);
 	}
+    // scanf("Please Enter the Number of Players:  %d\n",num_of_players);
+    
+    
+    
 }
 
 /* cleanup function called when program exits */
@@ -312,7 +357,8 @@ static void draw( ARdouble trans[3][4] )
     // printf("x angle is %f\n",A[1]*180/M_PI);
     // printf("z angle is %f\n",A[2]*180/M_PI);
     float g_x=A[2]*180/M_PI;
-    world->SetGravity(b2Vec2(-gravity_constant*(g_x-90),gravity_constant*A[0]*180/M_PI));
+    float g_y=A[0]*180/M_PI;
+    world->SetGravity(b2Vec2(-gravity_constant*(g_x-90),gravity_constant*(g_y+15)));
     // printf("gravity is (%f,%f)\n",world->GetGravity().x,world->GetGravity().y);
     // printf("Pos is (%f,%f)\n",ball.body->GetPosition().x,ball.body->GetPosition().x);
 
@@ -341,11 +387,37 @@ static void draw( ARdouble trans[3][4] )
 
     for (int i=0;i<maze_list.size();i++)
         maze_list[i]->draw();
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor3f(1.0f, 1.0f, 0.0f);
 
     ball.draw();
     world->Step(frame_rate,5,5);
     ball.update();
+    if(!reached){
+        if(ball.body->GetPosition().x>x_range.x&&ball.body->GetPosition().x<x_range.y){
+            if(ball.body->GetPosition().y>y_range.x&&ball.body->GetPosition().y<y_range.y)
+            {
+                end=clock();
+                elapsed_secs=double(end-begin)/CLOCKS_PER_SEC;
+                printf("Time Taken by Player %d = %f\n",curr_player,elapsed_secs);
+                reached=true;
+                scores.push_back(elapsed_secs);
+                if(curr_player==num_of_players){
+                    printf("Game Ends ...........!!!!!!!!!\n");
+                    int min_index=1;
+                    double min_time=scores[0];
+                    for(int i=0;i<scores.size();i++){
+                        if(scores[i]<min_time){
+                            min_index=i+1;
+                            min_time=scores[i];
+                        }
+                    }
+                    printf("The Winner is Player %d with time %f\n",min_index,min_time);
+                    cleanup();
+			        exit(0);
+                }
+            }  
+        }
+    }
 
     // r.draw();
     // glTranslatef( 0.0f, 0.0f, 40.0f );

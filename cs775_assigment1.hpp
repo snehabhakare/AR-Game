@@ -3,6 +3,7 @@
 #  include <windows.h>
 #endif
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <string.h>
 #ifndef __APPLE__
@@ -49,15 +50,24 @@ static void   draw( ARdouble trans[3][4] );
 
 float gravity_constant=0.5;
 float frame_rate=1/10.0;
-float coeff_of_rest=0.6f;
-b2World* world=new b2World(b2Vec2(5,5));
+float coeff_of_rest=0.5f;
+b2World* world=new b2World(b2Vec2(0,0));
 
 const float height_of_each_elem=10;
 float B=80,L=100,W=1;
-circle ball(2,10,10);
+b2Vec2 init_pos(1.5*L/10,-1.5*B/8);
+b2Vec2 x_range(4*L/10,5*L/10);
+b2Vec2 y_range(0,B/8);
+
+circle ball(3,init_pos.x,init_pos.y);
 std::vector<rectangle*> maze_list;
 
 int players;
 double elapsed_secs = 0;
 clock_t begin, end;
 std::vector<double> scores;
+
+bool reached=true;
+
+int num_of_players=1;
+int curr_player=0;
