@@ -100,6 +100,7 @@ static void   draw( ARdouble trans[3][4] );
 
 float gravity_constant=0.5;
 float frame_rate=1/10.0;
+float coeff_of_rest=0.5f;
 b2World* world=new b2World(b2Vec2(5,5));
 
 

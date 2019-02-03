@@ -3,6 +3,8 @@
 extern const float height_of_each_elem;
 extern b2World* world;
 extern float W;
+extern float coeff_of_rest;
+
 static void
 mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type)
 {
@@ -84,7 +86,7 @@ class rectangle{
 		fixturedef.shape = &shape;
 		fixturedef.density = 1.0;
     fixturedef.friction=0.0f;
-    fixturedef.restitution=0.5f;
+    fixturedef.restitution=coeff_of_rest;
 		body->CreateFixture(&fixturedef);
 	
     }

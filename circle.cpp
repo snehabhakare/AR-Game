@@ -2,7 +2,7 @@
 #include "cs775_assigment1.hpp"
 extern const float height_of_each_elem;
 extern b2World* world;
-
+extern float coeff_of_rest;
 class circle{
     float r;
     float cx,cy;
@@ -31,7 +31,7 @@ class circle{
 		fixturedef.shape = &shape;
 		fixturedef.density = 1.0;
         fixturedef.friction=0.0f;
-        fixturedef.restitution=0.5f;
+        fixturedef.restitution=coeff_of_rest;
 
 		body->CreateFixture(&fixturedef);
 	
