@@ -8,9 +8,9 @@ class circle{
     float cx,cy;
     float z_translate;
     int slice=400,stack=400;
-    b2Body* body;
     
     public:
+    b2Body* body;
 
     circle(float r_,float cx_,float cy_){
         cx = cx_;
@@ -19,7 +19,7 @@ class circle{
     
         b2BodyDef bodydef;
 		bodydef.position = b2Vec2(cx,cy);
-		bodydef.type = b2_dynamicBody;//change this TODO: 
+		bodydef.type = b2_dynamicBody;
 
 		body = world->CreateBody(&bodydef);
 
@@ -30,6 +30,9 @@ class circle{
 		b2FixtureDef fixturedef;
 		fixturedef.shape = &shape;
 		fixturedef.density = 1.0;
+        fixturedef.friction=0.0f;
+        fixturedef.restitution=0.5f;
+
 		body->CreateFixture(&fixturedef);
 	
     }

@@ -98,12 +98,12 @@ static void   cleanup(void);
 static void   mainLoop(void);
 static void   draw( ARdouble trans[3][4] );
 
-
-b2World* world=new b2World(b2Vec2(15,-15));
+float gravity_constant=0.5;
+b2World* world=new b2World(b2Vec2(5,5));
 
 
 const float height_of_each_elem=10;
 
 float B=80,L=100,W=1;
-circle ball(3,10,10);
+circle ball(2,10,10);
 std::vector<rectangle*> maze_list;

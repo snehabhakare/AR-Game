@@ -83,6 +83,8 @@ class rectangle{
 		b2FixtureDef fixturedef;
 		fixturedef.shape = &shape;
 		fixturedef.density = 1.0;
+    fixturedef.friction=0.0f;
+    fixturedef.restitution=0.5f;
 		body->CreateFixture(&fixturedef);
 	
     }

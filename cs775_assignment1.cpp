@@ -277,6 +277,12 @@ static void cleanup(void)
     arVideoClose();
 }
 
+static void get_angles(ARdouble* gl_para,float A[3]){
+    A[0]=asin(-gl_para[2]);
+    A[1]=atan2(gl_para[6],gl_para[10]);
+    A[2]=atan2(gl_para[1],gl_para[0]);
+    
+}
 static void draw( ARdouble trans[3][4] )
 {
     ARdouble  gl_para[16];
@@ -295,6 +301,16 @@ static void draw( ARdouble trans[3][4] )
     
     /* load the camera transformation matrix */
     argConvGlpara(trans, gl_para);
+    float A[3];
+    get_angles(gl_para,A);
+    printf("y angle is %f\n",A[0]*180/M_PI);
+    printf("x angle is %f\n",A[1]*180/M_PI);
+    printf("z angle is %f\n",A[2]*180/M_PI);
+    float g_x=A[2]*180/M_PI;
+    world->SetGravity(b2Vec2(gravity_constant*(g_x-90),gravity_constant*A[0]*180/M_PI));
+    printf("gravity is (%f,%f)\n",world->GetGravity().x,world->GetGravity().y);
+    printf("Pos is (%f,%f)\n",ball.body->GetPosition().x,ball.body->GetPosition().x);
+
     glMatrixMode(GL_MODELVIEW);
 #ifdef ARDOUBLE_IS_FLOAT
     glLoadMatrixf( gl_para );
@@ -323,7 +339,7 @@ static void draw( ARdouble trans[3][4] )
     glColor3f(1.0f, 0.0f, 0.0f);
 
     ball.draw();
-    world->Step(1.0/30.0,5,5);
+    world->Step(1.0,5,5);
     ball.update();
 
     // r.draw();
