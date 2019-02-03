@@ -225,7 +225,12 @@ static void   init(int argc, char *argv[])
         for( i = 2; i < argc; i++ ) {strcat(vconf, " "); strcat(vconf,argv[i]);}
     }
 
-    
+    printf("   _____                         __________                           \n");       
+printf("  /     \\ _____  ________ ____   \\______   \\__ __  ____   ____   ___________    \n");
+printf(" /  \\ /  \\\\__  \\ \\___   // __ \\   |       _/  |  \\/    \\ /    \\_/ __ \\_  __ \\   \n");
+printf("/    Y    \\/ __ \\_/    /\\  ___/   |    |   \\  |  /   |  \\   |  \\  ___/|  | \\/   \n");
+printf("\\____|__  (____  /_____ \\\\___  >  |____|_  /____/|___|  /___|  /\\___  >__|      \n");
+printf("        \\/     \\/      \\/    \\/          \\/           \\/     \\/     \\/       \n");
     printf("Please Enter the Number of Players: ");
     std::cin>>num_of_players;
 
