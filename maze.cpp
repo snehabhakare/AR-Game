@@ -3,7 +3,7 @@
 
 extern float B,L,W;
 extern std::vector<rectangle*> maze_list;
-
+extern b2Vec2 x_range,y_range,init_pos;
 void maze(){
     rectangle* r;
     int Bs=B/8;
@@ -14,11 +14,11 @@ void maze(){
     maze_list.push_back(r);
 
     //start
-    r=new rectangle(Ls,Bs,1.5*Ls,-1.5*Bs,3,0.6*height_of_each_elem);
+    r=new rectangle(Ls,Bs,init_pos.x,init_pos.y,3,0.6*height_of_each_elem);
     maze_list.push_back(r);
     
     //end
-    r=new rectangle(Ls,Bs,4.5*Ls,0.5*Bs,2,0.6*height_of_each_elem);
+    r=new rectangle(Ls,Bs,(x_range.x+x_range.y)/2,(y_range.x+y_range.y)/2,2,0.6*height_of_each_elem);
     maze_list.push_back(r);
     
     //vertical
