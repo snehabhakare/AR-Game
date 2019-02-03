@@ -6,8 +6,8 @@ void maze(){
     rectangle* r;
     //base
     
-    // r=new rectangle(L,B,0,0,false,0.5*height_of_each_elem);
-    // maze_list.push_back(r);
+    r=new rectangle(L,B,0,0,false,0.5*height_of_each_elem);
+    maze_list.push_back(r);
     
 
     //vertical

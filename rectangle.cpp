@@ -6,7 +6,7 @@ extern float W;
 extern float coeff_of_rest;
 
 static void
-mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type)
+mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type,bool go_to_box2d)
 {
   static GLfloat n[6][3] =
   {
@@ -17,6 +17,7 @@ mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type)
     {0.0, 0.0, 1.0},
     {0.0, 0.0, -1.0}
   };
+
   static GLint faces[6][4] =
   {
     {0, 1, 2, 3},
@@ -26,7 +27,13 @@ mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type)
     {5, 6, 2, 1},
     {7, 4, 0, 3}
   };
+  const GLubyte cube_faces [6][4] = { /* ccw-winding */
+        /* +z */ {3, 2, 1, 0}, /* -y */ {2, 3, 7, 6}, /* +y */ {0, 1, 5, 4},
+        /* -x */ {3, 0, 4, 7}, /* +x */ {1, 2, 6, 5}, /* -z */ {4, 5, 6, 7} };
   GLfloat v[8][3];
+  const GLubyte cube_vertex_colors [8][4] = {
+        {255, 255, 255, 255}, {255, 255, 0, 255}, {0, 255, 0, 255}, {0, 255, 255, 255},
+        {255, 0, 255, 255}, {255, 0, 0, 255}, {0, 0, 0, 255}, {0, 0, 255, 255} };
   GLint i;
 
   v[0][0] = v[1][0] = v[2][0] = v[3][0] = -size1 / 2;
@@ -35,26 +42,49 @@ mydrawBox(GLfloat size1,GLfloat size2,GLfloat size3, GLenum type)
   v[2][1] = v[3][1] = v[6][1] = v[7][1] = size2 / 2;
   v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size3 / 2;
   v[1][2] = v[2][2] = v[5][2] = v[6][2] = size3 / 2;
-
-  for (i = 5; i >= 0; i--) {
-    glBegin(type);
-    glNormal3fv(&n[i][0]);
-    glColor3f(1.0f,0.0f,0.0f);
-    glVertex3fv(&v[faces[i][0]][0]);
-    glColor3f(1.0f,0.0f,0.0f);
-    glVertex3fv(&v[faces[i][1]][0]);
-    glColor3f(1.0f,0.0f,0.0f);
-    glVertex3fv(&v[faces[i][2]][0]);
-    glColor3f(1.0f,0.0f,0.0f);
-    glVertex3fv(&v[faces[i][3]][0]);
-    glEnd();
+  if(!go_to_box2d){
+    for (i = 5; i >= 0; i--) {
+      glBegin(type);
+      glNormal3fv(&n[i][0]);
+      // glColor3f(1.0f,0.0f,0.0f);
+      glVertex3fv(&v[faces[i][0]][0]);
+      // glColor3f(1.0f,0.0f,0.0f);
+      glVertex3fv(&v[faces[i][1]][0]);
+      // glColor3f(1.0f,0.0f,0.0f);
+      glVertex3fv(&v[faces[i][2]][0]);
+      // glColor3f(1.0f,0.0f,0.0f);
+      glVertex3fv(&v[faces[i][3]][0]);
+      glEnd();
+    }
+  }
+  else{
+    glPushMatrix(); // Save world coordinate system.
+      // glRotatef(gDrawRotateAngle, 0.0f, 0.0f, 1.0f); // Rotate about z axis.
+      // glScalef(fSize, fSize, fSize);
+      // glTranslatef(0.0f, 0.0f, 0.5f); // Place base of cube on marker surface.
+      glDisable(GL_LIGHTING);
+      glDisable(GL_TEXTURE_2D);
+      glDisable(GL_BLEND);
+      glColorPointer(4, GL_UNSIGNED_BYTE, 0, cube_vertex_colors);
+      glVertexPointer(3, GL_FLOAT, 0, v);
+      glEnableClientState(GL_VERTEX_ARRAY);
+      glEnableClientState(GL_COLOR_ARRAY);
+      for (i = 0; i < 6; i++) {
+          glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_BYTE, &(cube_faces[i][0]));
+      }
+      glDisableClientState(GL_COLOR_ARRAY);
+      glColor4ub(0, 0, 0, 255);
+      for (i = 0; i < 6; i++) {
+          glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, &(cube_faces[i][0]));
+      }
+      glPopMatrix();    // Restore world coordinate system.
   }
 }
 
 void
-myglutSolidCuboid(GLdouble size1,GLdouble size2,GLdouble size3)
+myglutSolidCuboid(GLdouble size1,GLdouble size2,GLdouble size3,bool go_to_box2d)
 {
-  mydrawBox(size1,size2,size3 ,GL_QUADS);
+    mydrawBox(size1,size2,size3 ,GL_QUADS,go_to_box2d);
 }
 class rectangle{
     float half_l,half_b;
@@ -93,11 +123,8 @@ class rectangle{
 
 
     void draw(){
-        if(!go_to_box2d){
-          glColor3f(1.0f,0.0f,0.0f);
-        }
         glTranslatef(cx,cy,z_translate);
-        myglutSolidCuboid(half_l+W,half_b+W,height_of_each_elem);
+        myglutSolidCuboid(half_l+W,half_b+W,height_of_each_elem,go_to_box2d);
         glTranslatef(-cx,-cy,-z_translate);
         
     }
